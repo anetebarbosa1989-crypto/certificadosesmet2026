@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de Certificados · SESMET 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{
+    --navy: #1D4E89;
+    --navy-2: #163E6D;
+    --steel: #5A93C4;
+    --paper: #F5F8F3;
+    --paper-2: #E8EFE3;
+    --ink: #1A2530;
+    --ink-soft: #56636D;
+    --amber: #8BC34A;
+    --amber-deep: #6FA939;
+    --yellow: #F2C230;
+    --yellow-deep: #D9A812;
+    --safety-orange: #3F7FB0;
+    --teal: #4C9A3F;
+    --red: #B84C3E;
+    --line: rgba(29,78,137,0.16);
+    --radius: 3px;
+    --shadow: 0 1px 2px rgba(29,78,137,0.08), 0 6px 20px rgba(29,78,137,0.06);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      linear-gradient(180deg, var(--navy) 0%, var(--navy) 220px, var(--paper) 220px, var(--paper) 100%);
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--amber); color:var(--navy);}
+
+  /* ---------- top masthead ---------- */
+  .masthead{
+    max-width:1180px; margin:0 auto; padding:36px 28px 30px;
+    display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap;
+  }
+  .brand{display:flex; align-items:center; gap:16px;}
+  .brand-mark{
+    width:52px;height:52px; border-radius:50%;
+    background:repeating-conic-gradient(var(--amber) 0deg 90deg, var(--navy-2) 90deg 180deg);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow: inset 0 0 0 5px var(--paper), 0 0 0 2px var(--amber);
+    flex:none;
+  }
+  .brand-mark span{
+    font-family:'Oswald',sans-serif; font-weight:700; font-size:15px; color:var(--navy);
+    background:var(--paper); width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center; letter-spacing:0.5px;
+  }
+  .brand h1{
+    font-family:'Oswald',sans-serif; font-weight:600; font-size:26px; letter-spacing:0.3px;
+    color:var(--paper); margin:0; line-height:1.15;
+  }
+  .brand p{margin:4px 0 0; color:#B9C6CE; font-size:13px; letter-spacing:0.3px;}
+  .masthead-meta{
+    text-align:right; color:#B9C6CE; font-size:12px; font-family:'IBM Plex Mono',monospace;
+    letter-spacing:0.4px; line-height:1.7;
+  }
+  .masthead-meta b{color:var(--amber); font-weight:600;}
+
+  /* ---------- stat strip ---------- */
+  .stat-strip{
+    max-width:1180px; margin:-1px auto 0; padding:0 28px;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line); border-radius:var(--radius);
+    transform:translateY(-1px);
+  }
+  .stat{
+    background:#fff; padding:16px 18px; display:flex; flex-direction:column; gap:2px;
+  }
+  .stat .n{font-family:'Oswald',sans-serif; font-size:28px; font-weight:600; color:var(--navy);}
+  .stat .l{font-size:11px; text-transform:uppercase; letter-spacing:0.9px; color:var(--ink-soft); font-weight:600;}
+  .stat.warn .n{color:var(--safety-orange);}
+  .stat.bad .n{color:var(--red);}
+
+  /* ---------- toolbar ---------- */
+  .toolbar{
+    max-width:1180px; margin:26px auto 0; padding:0 28px;
+    display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+  }
+  .toolbar-left{display:flex; gap:10px; flex-wrap:wrap; flex:1;}
+  .field-inline{position:relative;}
+  .field-inline input, .field-inline select{
+    font-family:'Inter',sans-serif; font-size:13.5px; padding:10px 14px; border:1px solid var(--line);
+    border-radius:var(--radius); background:#fff; color:var(--ink); min-width:180px;
+  }
+  .field-inline input:focus, .field-inline select:focus{outline:2px solid var(--amber); outline-offset:1px;}
+  #search{min-width:240px;}
+  .btn{
+    font-family:'Inter',sans-serif; font-weight:600; font-size:13px; letter-spacing:0.2px;
+    padding:10px 18px; border-radius:var(--radius); border:1px solid transparent; cursor:pointer;
+    display:inline-flex; align-items:center; gap:8px; transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-primary{background:var(--navy); color:var(--paper);}
+  .btn-primary:hover{background:var(--navy-2);}
+  .btn-amber{background:var(--amber); color:var(--navy);}
+  .btn-amber:hover{background:var(--amber-deep); color:#fff;}
+  .btn-ghost{background:transparent; color:var(--navy); border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--navy);}
+  .btn-small{padding:6px 12px; font-size:12px;}
+  .btn-danger{background:transparent;color:var(--red);border-color:rgba(184,76,62,0.35);}
+  .btn-danger:hover{background:rgba(184,76,62,0.08);}
+
+  /* ---------- grid ---------- */
+  .grid-wrap{max-width:1180px; margin:22px auto 80px; padding:0 28px;}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(340px,1fr)); gap:16px;}
+
+  .card{
+    background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); position:relative; overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .card::before{
+    content:''; position:absolute; left:0; top:0; bottom:0; width:7px;
+  }
+  .card.nr10::before{background:repeating-linear-gradient(-45deg,#F2C94C 0 8px,#1A1A1A 8px 16px);}
+  .card.nr35::before{background:repeating-linear-gradient(-45deg,var(--safety-orange) 0 8px,#fff 8px 16px);}
+  .card.empty::before{background:var(--paper-2);}
+
+  .card-head{
+    padding:16px 16px 12px 22px; display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
+    border-bottom:1px dashed var(--line);
+  }
+  .badge-hole{
+    position:absolute; top:14px; right:16px; width:14px;height:14px; border-radius:50%;
+    background:var(--paper); box-shadow:inset 0 0 0 2px var(--line);
+  }
+  .card-index{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); letter-spacing:0.5px;
+  }
+  .card-curso{
+    font-family:'Oswald',sans-serif; font-weight:600; font-size:15px; letter-spacing:0.3px; margin-top:2px;
+  }
+  .card.nr10 .card-curso{color:var(--yellow-deep);}
+  .card.nr35 .card-curso{color:var(--safety-orange);}
+  .status-pill{
+    font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px;
+    padding:4px 9px; border-radius:20px; white-space:nowrap; margin-top:2px;
+  }
+  .status-ok{background:rgba(47,158,68,0.13); color:var(--teal);}
+  .status-warn{background:rgba(217,168,18,0.16); color:var(--yellow-deep);}
+  .status-bad{background:rgba(184,76,62,0.13); color:var(--red);}
+  .status-empty{background:var(--paper-2); color:var(--ink-soft);}
+
+  .card-body{padding:14px 16px 16px 22px; flex:1; display:flex; flex-direction:column; gap:10px;}
+  .card-name{font-family:'Oswald',sans-serif; font-size:17px; font-weight:500; color:var(--ink); min-height:22px;}
+  .card-name.placeholder{color:#B7BEC3; font-style:italic; font-weight:400; font-family:'Inter',sans-serif; font-size:13.5px;}
+  .kv-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px 14px; font-size:12.5px;}
+  .kv{display:flex; flex-direction:column; gap:1px;}
+  .kv label{color:var(--ink-soft); font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px; font-weight:600;}
+  .kv span{font-family:'IBM Plex Mono',monospace; color:var(--ink); font-size:12.5px;}
+
+  .card-actions{
+    display:flex; gap:8px; padding:12px 16px 16px 22px; border-top:1px solid var(--line);
+    background:var(--paper); margin-top:auto;
+  }
+  .card-actions .btn{flex:1; justify-content:center;}
+
+  .empty-card{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    padding:40px 16px; color:var(--ink-soft); cursor:pointer; min-height:190px; text-align:center;
+  }
+  .empty-card .plus{
+    width:36px;height:36px;border-radius:50%; border:1.5px dashed var(--steel);
+    display:flex;align-items:center;justify-content:center; font-size:18px; color:var(--steel);
+  }
+  .empty-card:hover{background:var(--paper);}
+  .empty-card b{font-size:12.5px; color:var(--ink-soft); font-weight:600; letter-spacing:0.2px;}
+
+  .add-more-row{display:flex; justify-content:center; margin-top:22px;}
+
+  /* ---------- modal ---------- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(15,36,54,0.55); backdrop-filter:blur(2px);
+    display:none; align-items:flex-start; justify-content:center; z-index:50; padding:40px 16px; overflow-y:auto;
+  }
+  .overlay.show{display:flex;}
+  .modal{
+    background:#fff; width:100%; max-width:760px; border-radius:6px; box-shadow:0 20px 60px rgba(0,0,0,0.35);
+    overflow:hidden;
+  }
+  .modal-head{
+    background:var(--navy); color:var(--paper); padding:20px 26px; display:flex; justify-content:space-between; align-items:center;
+  }
+  .modal-head h2{font-family:'Oswald',sans-serif; font-weight:600; font-size:19px; margin:0;}
+  .modal-close{background:none; border:none; color:#B9C6CE; font-size:22px; cursor:pointer; line-height:1;}
+  .modal-close:hover{color:#fff;}
+  .modal-body{padding:24px 26px; max-height:72vh; overflow-y:auto;}
+
+  .form-section-title{
+    font-family:'Oswald',sans-serif; font-size:12.5px; text-transform:uppercase; letter-spacing:0.8px;
+    color:var(--steel); margin:22px 0 10px; padding-top:14px; border-top:1px solid var(--line);
+  }
+  .form-section-title:first-child{margin-top:0; padding-top:0; border-top:none;}
+  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .form-grid.full{grid-template-columns:1fr;}
+  .f{display:flex; flex-direction:column; gap:5px;}
+  .f label{font-size:12px; font-weight:600; color:var(--ink-soft);}
+  .f label i{font-weight:400; font-style:normal; color:#9AA6AC;}
+  .f input, .f select, .f textarea{
+    font-family:'Inter',sans-serif; padding:9px 11px; border:1px solid var(--line); border-radius:var(--radius);
+    font-size:13.5px; color:var(--ink); background:#fff;
+  }
+  .f input:focus, .f select:focus, .f textarea:focus{outline:2px solid var(--amber); outline-offset:1px;}
+  .f-with-link{display:flex; gap:8px;}
+  .f-with-link input{flex:1;}
+  .link-btn{
+    display:flex; align-items:center; justify-content:center; padding:0 12px; border-radius:var(--radius);
+    border:1px solid var(--line); color:var(--navy); text-decoration:none; font-size:11.5px; font-weight:600;
+    white-space:nowrap; background:var(--paper);
+  }
+  .link-btn:hover{background:var(--paper-2);}
+  .hint{font-size:11px; color:#9AA6AC; margin-top:2px;}
+
+  .file-drop{
+    border:1.5px dashed var(--line); border-radius:var(--radius); padding:16px; text-align:center;
+    font-size:12.5px; color:var(--ink-soft); cursor:pointer; background:var(--paper);
+  }
+  .file-drop:hover{border-color:var(--steel);}
+  .file-drop.has-file{border-color:var(--teal); color:var(--teal); background:rgba(47,158,68,0.06);}
+  .file-drop-small{padding:8px 10px; font-size:11.5px; margin-top:6px; text-align:left;}
+
+  .modal-foot{
+    padding:16px 26px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:10px;
+    background:var(--paper);
+  }
+
+  /* QR viewer modal */
+  .qr-wrap{display:flex; flex-direction:column; align-items:center; gap:14px; padding:6px 0 4px;}
+  #qrcode-box{padding:14px; background:#fff; border:1px solid var(--line); border-radius:6px;}
+  .qr-code-text{
+    font-family:'IBM Plex Mono',monospace; font-size:13px; background:var(--paper); padding:8px 14px;
+    border-radius:20px; letter-spacing:0.5px; color:var(--navy); border:1px solid var(--line);
+  }
+  .qr-url{font-size:11.5px; color:var(--ink-soft); word-break:break-all; text-align:center; max-width:420px;}
+
+  /* consulta pública view */
+  .consulta-wrap{max-width:640px; margin:60px auto; padding:0 20px;}
+  .cert-official{
+    background:#fff; border:1px solid var(--line); border-radius:8px; box-shadow:var(--shadow); overflow:hidden;
+  }
+  .cert-official-head{
+    background:var(--navy); color:var(--paper); padding:26px 30px; text-align:center;
+  }
+  .cert-official-head .seal{
+    width:46px;height:46px;border-radius:50%; margin:0 auto 10px;
+    background:repeating-conic-gradient(var(--amber) 0deg 90deg, var(--navy-2) 90deg 180deg);
+    box-shadow: inset 0 0 0 4px var(--paper), 0 0 0 2px var(--amber);
+  }
+  .cert-official-head h1{font-family:'Oswald',sans-serif; font-size:18px; margin:0; letter-spacing:0.4px;}
+  .cert-official-head p{margin:4px 0 0; font-size:12px; color:#B9C6CE;}
+  .verify-flag{
+    display:inline-flex; align-items:center; gap:6px; margin-top:14px; padding:6px 14px; border-radius:20px;
+    background:rgba(47,158,68,0.2); color:#A8E6B0; font-size:11.5px; font-weight:700; letter-spacing:0.4px; text-transform:uppercase;
+  }
+  .verify-flag.invalid{background:rgba(184,76,62,0.2); color:#F3B3AB;}
+  .cert-official-body{padding:26px 30px;}
+  .cert-row{display:flex; justify-content:space-between; gap:14px; padding:11px 0; border-bottom:1px solid var(--line); font-size:13.5px;}
+  .cert-row:last-child{border-bottom:none;}
+  .cert-row label{color:var(--ink-soft); font-weight:600;}
+  .cert-row span{font-family:'IBM Plex Mono',monospace; text-align:right;}
+  .back-link{display:block; text-align:center; margin-top:18px; font-size:12.5px; color:var(--steel);}
+
+  .empty-state{
+    text-align:center; padding:60px 20px; color:var(--ink-soft);
+  }
+
+  footer{
+    text-align:center; padding:26px 20px 40px; font-size:11.5px; color:#8B98A0;
+  }
+
+  @media (max-width:640px){
+    .stat-strip{grid-template-columns:repeat(2,1fr);}
+    .form-grid{grid-template-columns:1fr;}
+    .masthead{flex-direction:column; align-items:flex-start;}
+    .masthead-meta{text-align:left;}
+  }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<footer>Registro interno de treinamentos SESMET · uso corporativo · dados armazenados neste documento</footer>
+
+<script>
+/* ======================= CONFIG & STATE ======================= */
+const MIN_SLOTS = 20;
+const VALIDADE_ANOS = { 'NR-10':2, 'NR-35':2 };
+const LOOKUP_LINKS = {
+  art: 'https://art.creadf.org.br/art1025/site/autenticidade_art.php',
+  crq: 'https://corp.creadf.org.br/crq/form/validar'
+};
+
+let certificates = [];   // array of certificate objects (in display order)
+let baseUrlOverride = '';
+let currentEditId = null;
+
+const emptyCert = () => ({
+  id: 'c' + Date.now() + Math.random().toString(16).slice(2,8),
+  nome:'', cpf:'', curso:'NR-10', cargaHoraria:'', dataRealizacao:'', dataValidade:'',
+  numeroCertificado:'', instrutorNome:'', instrutorART:'', instrutorCRQ:'', crqPJ:'',
+  arquivoNome:'', arquivoData:'',
+  artArquivoNome:'', artArquivoData:'',
+  crqInstrutorArquivoNome:'', crqInstrutorArquivoData:'',
+  crqPjArquivoNome:'', crqPjArquivoData:'',
+  observacoes:''
+});
+
+/* ======================= STORAGE ======================= */
+async function loadAll(){
+  try{
+    const idx = await window.storage.get('cert-index', true);
+    const ids = idx ? JSON.parse(idx.value) : [];
+    const loaded = [];
+    for(const id of ids){
+      try{
+        const rec = await window.storage.get('cert:'+id, true);
+        if(rec) loaded.push(JSON.parse(rec.value));
+      }catch(e){ /* record missing, skip */ }
+    }
+    certificates = loaded;
+  }catch(e){ certificates = []; }
+
+  try{
+    const cfg = await window.storage.get('config-base-url', true);
+    baseUrlOverride = cfg ? JSON.parse(cfg.value).url : '';
+  }catch(e){ baseUrlOverride = ''; }
+}
+
+async function saveIndex(){
+  const ids = certificates.map(c=>c.id);
+  try{ await window.storage.set('cert-index', JSON.stringify(ids), true); }
+  catch(e){ console.error('Falha ao salvar índice', e); }
+}
+
+async function saveCert(cert){
+  try{ await window.storage.set('cert:'+cert.id, JSON.stringify(cert), true); }
+  catch(e){ console.error('Falha ao salvar certificado', e); alert('Não foi possível salvar. O arquivo anexado pode ser grande demais (limite 5MB).'); }
+}
+
+async function deleteCertStorage(id){
+  try{ await window.storage.delete('cert:'+id, true); }catch(e){}
+}
+
+async function saveBaseUrl(url){
+  baseUrlOverride = url;
+  try{ await window.storage.set('config-base-url', JSON.stringify({url}), true); }catch(e){}
+}
+
+/* ======================= HELPERS ======================= */
+function fmtDate(d){
+  if(!d) return '—';
+  const [y,m,day] = d.split('-');
+  if(!y) return d;
+  return `${day}/${m}/${y}`;
+}
+function addYears(dateStr, years){
+  if(!dateStr) return '';
+  const d = new Date(dateStr+'T00:00:00');
+  d.setFullYear(d.getFullYear()+years);
+  return d.toISOString().slice(0,10);
+}
+function certStatus(cert){
+  if(!cert.dataValidade) return {label:'Incompleto', cls:'status-empty'};
+  const today = new Date().toISOString().slice(0,10);
+  const daysLeft = (new Date(cert.dataValidade) - new Date(today)) / 86400000;
+  if(daysLeft < 0) return {label:'Vencido', cls:'status-bad'};
+  if(daysLeft <= 60) return {label:'Vence em breve', cls:'status-warn'};
+  return {label:'Válido', cls:'status-ok'};
+}
+function isFilled(cert){ return cert.nome && cert.numeroCertificado; }
+function getBaseUrl(){
+  if(baseUrlOverride) return baseUrlOverride.replace(/\/$/,'').replace(/#.*$/,'');
+  return (window.location.origin + window.location.pathname).replace(/\/$/,'');
+}
+function certLink(id){ return getBaseUrl() + '#consulta=' + id; }
+function esc(s){ return (s||'').toString().replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+/* ======================= RENDER: ADMIN ======================= */
+function renderAdmin(){
+  const total = certificates.length;
+  const filled = certificates.filter(isFilled);
+  const nr10 = filled.filter(c=>c.curso==='NR-10').length;
+  const nr35 = filled.filter(c=>c.curso==='NR-35').length;
+  const vencidos = filled.filter(c=>certStatus(c).cls==='status-bad').length;
+
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="masthead">
+      <div class="brand">
+        <div class="brand-mark"><span>SST</span></div>
+        <div>
+          <h1>Registro de Certificados · SESMET 2026</h1>
+          <p>NR-10 e NR-35 — controle interno e verificação por QR Code</p>
+        </div>
+      </div>
+      <div class="masthead-meta">
+        LINK BASE DE PUBLICAÇÃO<br>
+        <b id="base-url-display">${esc(getBaseUrl())}</b>
+      </div>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat"><div class="n">${total}</div><div class="l">Registros</div></div>
+      <div class="stat"><div class="n">${nr10}</div><div class="l">NR-10 emitidos</div></div>
+      <div class="stat"><div class="n">${nr35}</div><div class="l">NR-35 emitidos</div></div>
+      <div class="stat ${vencidos>0?'bad':''}"><div class="n">${vencidos}</div><div class="l">Vencidos</div></div>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="field-inline"><input id="search" type="text" placeholder="Buscar por nome, CPF ou nº do certificado…"></div>
+        <div class="field-inline">
+          <select id="filter-curso">
+            <option value="">Todos os cursos</option>
+            <option value="NR-10">NR-10</option>
+            <option value="NR-35">NR-35</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-ghost btn-small" id="btn-config-url">Configurar link de publicação</button>
+        <button class="btn btn-ghost btn-small" id="btn-export">Exportar página pública</button>
+        <button class="btn btn-primary btn-small" id="btn-qr-geral">QR Code geral (consulta)</button>
+        <button class="btn btn-amber" id="btn-add">+ Novo certificado</button>
+      </div>
+    </div>
+
+    <div class="grid-wrap">
+      <div class="grid" id="grid"></div>
+      <div class="add-more-row"><button class="btn btn-ghost" id="btn-add-2">+ Adicionar outro certificado</button></div>
+    </div>
+
+    <div class="overlay" id="overlay-form"></div>
+    <div class="overlay" id="overlay-qr"></div>
+  `;
+
+  document.getElementById('base-url-display').textContent = getBaseUrl();
+  document.getElementById('btn-add').onclick = ()=>openForm(null);
+  document.getElementById('btn-add-2').onclick = ()=>openForm(null);
+  document.getElementById('btn-config-url').onclick = openBaseUrlPrompt;
+  document.getElementById('btn-export').onclick = exportPublicHtml;
+  document.getElementById('btn-qr-geral').onclick = openQrGeral;
+  document.getElementById('search').oninput = renderGrid;
+  document.getElementById('filter-curso').onchange = renderGrid;
+
+  renderGrid();
+}
+
+function renderGrid(){
+  const grid = document.getElementById('grid');
+  if(!grid) return;
+  const q = (document.getElementById('search').value || '').toLowerCase();
+  const cursoFilter = document.getElementById('filter-curso').value;
+
+  const slotsToShow = Math.max(certificates.length, MIN_SLOTS);
+  let html = '';
+
+  for(let i=0;i<slotsToShow;i++){
+    const cert = certificates[i];
+    if(!cert){
+      html += `<div class="card empty" data-idx="${i}">
+        <div class="empty-card">
+          <div class="plus">+</div>
+          <b>Certificado ${String(i+1).padStart(2,'0')}</b>
+          <span style="font-size:11px;">Vazio — clique para cadastrar</span>
+        </div>
+      </div>`;
+      continue;
+    }
+    const matchesSearch = !q || [cert.nome,cert.cpf,cert.numeroCertificado].join(' ').toLowerCase().includes(q);
+    const matchesCurso = !cursoFilter || cert.curso === cursoFilter;
+    if(!matchesSearch || !matchesCurso){ continue; }
+
+    const st = certStatus(cert);
+    const cursoClass = cert.curso === 'NR-35' ? 'nr35' : 'nr10';
+    html += `<div class="card ${cursoClass}" data-id="${cert.id}">
+      <div class="badge-hole"></div>
+      <div class="card-head">
+        <div>
+          <div class="card-index">CERT. ${String(i+1).padStart(2,'0')}${cert.numeroCertificado?' · Nº '+esc(cert.numeroCertificado):''}</div>
+          <div class="card-curso">${esc(cert.curso)}</div>
+        </div>
+        <div class="status-pill ${st.cls}">${st.label}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-name ${!cert.nome?'placeholder':''}">${cert.nome ? esc(cert.nome) : 'Sem nome cadastrado'}</div>
+        <div class="kv-grid">
+          <div class="kv"><label>Carga horária</label><span>${cert.cargaHoraria? esc(cert.cargaHoraria)+'h':'—'}</span></div>
+          <div class="kv"><label>Validade</label><span>${fmtDate(cert.dataValidade)}</span></div>
+          <div class="kv"><label>Instrutor</label><span style="font-family:'Inter';">${cert.instrutorNome? esc(cert.instrutorNome):'—'}</span></div>
+          <div class="kv"><label>CRQ da PJ</label><span>${cert.crqPJ? esc(cert.crqPJ):'—'}</span></div>
+        </div>
+        <div class="hint" style="margin-top:2px;">Anexos: ${['arquivoNome','artArquivoNome','crqInstrutorArquivoNome','crqPjArquivoNome'].filter(k=>cert[k]).length} de 4 (certificado, ART, CRQ instrutor, CRQ PJ)</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn btn-ghost btn-small" data-action="edit" data-id="${cert.id}">Editar</button>
+        <button class="btn btn-primary btn-small" data-action="qr" data-id="${cert.id}">Ver QR Code</button>
+        <button class="btn btn-danger btn-small" data-action="del" data-id="${cert.id}">Excluir</button>
+      </div>
+    </div>`;
+  }
+
+  grid.innerHTML = html || `<div class="empty-state">Nenhum certificado encontrado para este filtro.</div>`;
+
+  grid.querySelectorAll('.card.empty').forEach(el=>{
+    el.querySelector('.empty-card').onclick = ()=>openForm(null);
+  });
+  grid.querySelectorAll('[data-action="edit"]').forEach(el=>{
+    el.onclick = ()=>openForm(el.dataset.id);
+  });
+  grid.querySelectorAll('[data-action="qr"]').forEach(el=>{
+    el.onclick = ()=>openQr(el.dataset.id);
+  });
+  grid.querySelectorAll('[data-action="del"]').forEach(el=>{
+    el.onclick = ()=>removeCert(el.dataset.id);
+  });
+}
+
+/* ======================= FORM MODAL ======================= */
+function openForm(id){
+  currentEditId = id;
+  const cert = id ? certificates.find(c=>c.id===id) : emptyCert();
+  const overlay = document.getElementById('overlay-form');
+
+  overlay.innerHTML = `
+    <div class="modal">
+      <div class="modal-head">
+        <h2>${id? 'Editar certificado' : 'Novo certificado'}</h2>
+        <button class="modal-close" id="close-form">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-section-title">Dados do treinamento</div>
+        <div class="form-grid">
+          <div class="f"><label>Nome do profissional treinado</label><input id="f-nome" value="${esc(cert.nome)}"></div>
+          <div class="f"><label>CPF</label><input id="f-cpf" value="${esc(cert.cpf)}" placeholder="000.000.000-00"></div>
+          <div class="f"><label>Curso</label>
+            <select id="f-curso">
+              <option value="NR-10" ${cert.curso==='NR-10'?'selected':''}>NR-10 · Segurança em Instalações Elétricas</option>
+              <option value="NR-35" ${cert.curso==='NR-35'?'selected':''}>NR-35 · Trabalho em Altura</option>
+            </select>
+          </div>
+          <div class="f"><label>Carga horária <i>(horas)</i></label><input id="f-carga" value="${esc(cert.cargaHoraria)}"></div>
+          <div class="f"><label>Data de realização</label><input type="date" id="f-data-realizacao" value="${esc(cert.dataRealizacao)}"></div>
+          <div class="f"><label>Data de validade</label><input type="date" id="f-validade" value="${esc(cert.dataValidade)}"></div>
+          <div class="f"><label>Número do certificado</label><input id="f-numero" value="${esc(cert.numeroCertificado)}"></div>
+        </div>
+
+        <div class="form-section-title">Responsável técnico pelo treinamento</div>
+        <div class="form-grid">
+          <div class="f"><label>Nome do instrutor</label><input id="f-instrutor" value="${esc(cert.instrutorNome)}"></div>
+          <div class="f"></div>
+          <div class="f">
+            <label>ART do instrutor <i>(nº da Anotação de Responsabilidade Técnica)</i></label>
+            <div class="f-with-link">
+              <input id="f-art" value="${esc(cert.instrutorART)}" placeholder="Nº da ART">
+              <a class="link-btn" href="${LOOKUP_LINKS.art}" target="_blank" rel="noopener">Consultar ART ↗</a>
+            </div>
+            <div class="hint">Autenticidade de ART · Crea-DF</div>
+            <div class="file-drop file-drop-small ${cert.artArquivoNome?'has-file':''}" id="file-drop-art">
+              ${cert.artArquivoNome ? '📎 '+esc(cert.artArquivoNome)+' — substituir' : 'Anexar arquivo da ART'}
+            </div>
+            <input type="file" id="f-arquivo-art" accept=".pdf,image/*" style="display:none;">
+          </div>
+          <div class="f">
+            <label>CRQ do instrutor <i>(se aplicável)</i></label>
+            <div class="f-with-link">
+              <input id="f-crq-instrutor" value="${esc(cert.instrutorCRQ)}" placeholder="Nº do registro CRQ">
+              <a class="link-btn" href="${LOOKUP_LINKS.crq}" target="_blank" rel="noopener">Consultar CRQ ↗</a>
+            </div>
+            <div class="hint">Validação de CRQ · Crea-DF</div>
+            <div class="file-drop file-drop-small ${cert.crqInstrutorArquivoNome?'has-file':''}" id="file-drop-crq-instrutor">
+              ${cert.crqInstrutorArquivoNome ? '📎 '+esc(cert.crqInstrutorArquivoNome)+' — substituir' : 'Anexar arquivo do CRQ'}
+            </div>
+            <input type="file" id="f-arquivo-crq-instrutor" accept=".pdf,image/*" style="display:none;">
+          </div>
+        </div>
+
+        <div class="form-section-title">Pessoa jurídica responsável pelo SESMET</div>
+        <div class="form-grid">
+          <div class="f">
+            <label>CRQ da PJ que realizou o SESMET</label>
+            <div class="f-with-link">
+              <input id="f-crq-pj" value="${esc(cert.crqPJ)}" placeholder="Nº do registro CRQ da empresa">
+              <a class="link-btn" href="${LOOKUP_LINKS.crq}" target="_blank" rel="noopener">Consultar CRQ ↗</a>
+            </div>
+            <div class="file-drop file-drop-small ${cert.crqPjArquivoNome?'has-file':''}" id="file-drop-crq-pj">
+              ${cert.crqPjArquivoNome ? '📎 '+esc(cert.crqPjArquivoNome)+' — substituir' : 'Anexar arquivo do CRQ da PJ'}
+            </div>
+            <input type="file" id="f-arquivo-crq-pj" accept=".pdf,image/*" style="display:none;">
+          </div>
+          <div class="f"></div>
+        </div>
+
+        <div class="form-section-title">Arquivo do certificado</div>
+        <div class="form-grid full">
+          <div class="f">
+            <div class="file-drop ${cert.arquivoNome?'has-file':''}" id="file-drop">
+              ${cert.arquivoNome ? '📎 '+esc(cert.arquivoNome)+' — clique para substituir' : 'Clique para anexar o certificado (PDF ou imagem, até 5MB)'}
+            </div>
+            <input type="file" id="f-arquivo" accept=".pdf,image/*" style="display:none;">
+          </div>
+        </div>
+
+        <div class="form-section-title">Observações</div>
+        <div class="form-grid full">
+          <div class="f"><textarea id="f-obs" rows="2">${esc(cert.observacoes)}</textarea></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" id="cancel-form">Cancelar</button>
+        <button class="btn btn-primary" id="save-form">Salvar certificado</button>
+      </div>
+    </div>
+  `;
+  overlay.classList.add('show');
+
+  let pendingFiles = {
+    cert: { name: cert.arquivoNome, data: cert.arquivoData },
+    art: { name: cert.artArquivoNome, data: cert.artArquivoData },
+    crqInstrutor: { name: cert.crqInstrutorArquivoNome, data: cert.crqInstrutorArquivoData },
+    crqPj: { name: cert.crqPjArquivoNome, data: cert.crqPjArquivoData },
+  };
+
+  function wireFileDrop(dropId, inputId, key, replaceLabel, defaultLabel){
+    const drop = document.getElementById(dropId);
+    const input = document.getElementById(inputId);
+    drop.onclick = ()=>input.click();
+    input.onchange = (e)=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      if(file.size > 5*1024*1024){ alert('Arquivo muito grande. Limite de 5MB.'); return; }
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        pendingFiles[key] = { name:file.name, data:reader.result };
+        drop.textContent = '📎 ' + file.name + ' — ' + replaceLabel;
+        drop.classList.add('has-file');
+      };
+      reader.readAsDataURL(file);
+    };
+  }
+
+  document.getElementById('close-form').onclick = closeForm;
+  document.getElementById('cancel-form').onclick = closeForm;
+
+  document.getElementById('f-curso').onchange = (e)=>{
+    const realiz = document.getElementById('f-data-realizacao').value;
+    if(realiz && !document.getElementById('f-validade').value){
+      document.getElementById('f-validade').value = addYears(realiz, VALIDADE_ANOS[e.target.value] || 2);
+    }
+  };
+  document.getElementById('f-data-realizacao').onchange = (e)=>{
+    const curso = document.getElementById('f-curso').value;
+    if(e.target.value && !document.getElementById('f-validade').value){
+      document.getElementById('f-validade').value = addYears(e.target.value, VALIDADE_ANOS[curso] || 2);
+    }
+  };
+
+  wireFileDrop('file-drop', 'f-arquivo', 'cert', 'clique para substituir');
+  wireFileDrop('file-drop-art', 'f-arquivo-art', 'art', 'substituir');
+  wireFileDrop('file-drop-crq-instrutor', 'f-arquivo-crq-instrutor', 'crqInstrutor', 'substituir');
+  wireFileDrop('file-drop-crq-pj', 'f-arquivo-crq-pj', 'crqPj', 'substituir');
+
+  document.getElementById('save-form').onclick = async ()=>{
+    const updated = {
+      ...cert,
+      nome: document.getElementById('f-nome').value.trim(),
+      cpf: document.getElementById('f-cpf').value.trim(),
+      curso: document.getElementById('f-curso').value,
+      cargaHoraria: document.getElementById('f-carga').value.trim(),
+      dataRealizacao: document.getElementById('f-data-realizacao').value,
+      dataValidade: document.getElementById('f-validade').value,
+      numeroCertificado: document.getElementById('f-numero').value.trim(),
+      instrutorNome: document.getElementById('f-instrutor').value.trim(),
+      instrutorART: document.getElementById('f-art').value.trim(),
+      instrutorCRQ: document.getElementById('f-crq-instrutor').value.trim(),
+      crqPJ: document.getElementById('f-crq-pj').value.trim(),
+      arquivoNome: pendingFiles.cert.name || '',
+      arquivoData: pendingFiles.cert.data || '',
+      artArquivoNome: pendingFiles.art.name || '',
+      artArquivoData: pendingFiles.art.data || '',
+      crqInstrutorArquivoNome: pendingFiles.crqInstrutor.name || '',
+      crqInstrutorArquivoData: pendingFiles.crqInstrutor.data || '',
+      crqPjArquivoNome: pendingFiles.crqPj.name || '',
+      crqPjArquivoData: pendingFiles.crqPj.data || '',
+      observacoes: document.getElementById('f-obs').value.trim(),
+    };
+    if(!updated.nome || !updated.numeroCertificado){
+      alert('Preencha ao menos o nome do profissional e o número do certificado.');
+      return;
+    }
+    const existingIdx = certificates.findIndex(c=>c.id===updated.id);
+    if(existingIdx >= 0){ certificates[existingIdx] = updated; }
+    else { certificates.push(updated); }
+    await saveCert(updated);
+    await saveIndex();
+    closeForm();
+    renderAdmin();
+  };
+}
+function closeForm(){
+  document.getElementById('overlay-form').classList.remove('show');
+  document.getElementById('overlay-form').innerHTML = '';
+}
+
+async function removeCert(id){
+  if(!confirm('Excluir este certificado? Esta ação não pode ser desfeita.')) return;
+  certificates = certificates.filter(c=>c.id!==id);
+  await deleteCertStorage(id);
+  await saveIndex();
+  renderGrid();
+  const stripEls = document.querySelectorAll('.stat .n');
+  renderAdmin();
+}
+
+/* ======================= QR MODAL ======================= */
+function openQrGeral(){
+  const overlay = document.getElementById('overlay-qr');
+  const link = getBaseUrl();
+  overlay.innerHTML = `
+    <div class="modal" style="max-width:460px;">
+      <div class="modal-head">
+        <h2>QR Code geral de consulta</h2>
+        <button class="modal-close" id="close-qr">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="qr-wrap">
+          <div id="qrcode-box"></div>
+          <div class="qr-code-text">Página de consulta pública</div>
+          <div class="qr-url">${esc(link)}</div>
+          <div class="hint" style="text-align:center; max-width:400px;">
+            Este é o QR recomendado: imprima uma única vez (ex: cartaz, crachá padrão, mural) e afixe onde for
+            necessário. Quem escanear cai na página de busca e pode localizar qualquer certificado pelo nome,
+            CPF ou número — sem precisar de um QR diferente para cada pessoa.
+          </div>
+          ${!baseUrlOverride ? `<div class="hint" style="text-align:center; max-width:380px; color:var(--red);">Configure o "link de publicação" com o endereço final hospedado antes de imprimir este QR.</div>` : ''}
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" id="copy-link">Copiar link</button>
+        <button class="btn btn-primary" id="close-qr-2">Fechar</button>
+      </div>
+    </div>
+  `;
+  overlay.classList.add('show');
+  new QRCode(document.getElementById('qrcode-box'), {
+    text: link, width:200, height:200,
+    colorDark: '#1D4E89', colorLight:'#ffffff', correctLevel: QRCode.CorrectLevel.M
+  });
+  document.getElementById('close-qr').onclick = ()=>{ overlay.classList.remove('show'); overlay.innerHTML=''; };
+  document.getElementById('close-qr-2').onclick = ()=>{ overlay.classList.remove('show'); overlay.innerHTML=''; };
+  document.getElementById('copy-link').onclick = ()=>{
+    navigator.clipboard.writeText(link).then(()=>{
+      document.getElementById('copy-link').textContent = 'Link copiado!';
+      setTimeout(()=>{ document.getElementById('copy-link').textContent = 'Copiar link'; }, 1500);
+    });
+  };
+}
+
+function openQr(id){
+  const cert = certificates.find(c=>c.id===id);
+  if(!cert) return;
+  const overlay = document.getElementById('overlay-qr');
+  const link = certLink(id);
+  overlay.innerHTML = `
+    <div class="modal" style="max-width:460px;">
+      <div class="modal-head">
+        <h2>QR individual (opcional)</h2>
+        <button class="modal-close" id="close-qr">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="qr-wrap">
+          <div id="qrcode-box"></div>
+          <div class="qr-code-text">Certificado nº ${esc(cert.numeroCertificado)}</div>
+          <div class="qr-url">${esc(link)}</div>
+          <div class="hint" style="text-align:center; max-width:380px;">
+            Aponta direto para este certificado. Use apenas se quiser colar um QR específico junto a este
+            documento — o QR Code geral (botão no topo) já cobre a consulta de todos.
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" id="copy-link">Copiar link</button>
+        <button class="btn btn-primary" id="close-qr-2">Fechar</button>
+      </div>
+    </div>
+  `;
+  overlay.classList.add('show');
+  new QRCode(document.getElementById('qrcode-box'), {
+    text: link, width:180, height:180,
+    colorDark: '#1D4E89', colorLight:'#ffffff', correctLevel: QRCode.CorrectLevel.M
+  });
+  document.getElementById('close-qr').onclick = ()=>{ overlay.classList.remove('show'); overlay.innerHTML=''; };
+  document.getElementById('close-qr-2').onclick = ()=>{ overlay.classList.remove('show'); overlay.innerHTML=''; };
+  document.getElementById('copy-link').onclick = ()=>{
+    navigator.clipboard.writeText(link).then(()=>{
+      document.getElementById('copy-link').textContent = 'Link copiado!';
+      setTimeout(()=>{ document.getElementById('copy-link').textContent = 'Copiar link'; }, 1500);
+    });
+  };
+}
+
+function openBaseUrlPrompt(){
+  const url = prompt('Informe o endereço público final onde esta página será hospedada (ex: https://empresa.com/certificados-sesmet.html). Os QR Codes usarão este endereço.', baseUrlOverride || (window.location.origin+window.location.pathname));
+  if(url !== null){
+    saveBaseUrl(url.trim());
+    renderAdmin();
+  }
+}
+
+/* ======================= EXPORT: STATIC PUBLIC PAGE ======================= */
+function buildPublicHtml(){
+  const dataJson = JSON.stringify(certificates).replace(/</g,'\\u003c');
+  return `<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consulta de Certificados · SESMET 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1D4E89;--navy-2:#163E6D;--steel:#5A93C4;--paper:#F5F8F3;--paper-2:#E8EFE3;--ink:#1A2530;--ink-soft:#56636D;
+--amber:#8BC34A;--amber-deep:#6FA939;--yellow:#F2C230;--yellow-deep:#D9A812;--blue:#3F7FB0;--teal:#4C9A3F;--red:#B84C3E;
+--line:rgba(29,78,137,0.16);}
+*{box-sizing:border-box;} body{margin:0;font-family:'Inter',sans-serif;color:var(--ink);background:var(--paper);}
+.top{background:var(--navy);color:#fff;padding:30px 20px;text-align:center;}
+.top .seal{width:44px;height:44px;border-radius:50%;margin:0 auto 10px;background:repeating-conic-gradient(var(--amber) 0deg 90deg, var(--navy-2) 90deg 180deg);box-shadow:inset 0 0 0 4px var(--paper),0 0 0 2px var(--amber);}
+.top h1{font-family:'Oswald',sans-serif;font-size:19px;margin:0;}
+.top p{margin:4px 0 0;font-size:12px;color:#B9C6CE;}
+.wrap{max-width:640px;margin:0 auto;padding:24px 18px 60px;}
+.search{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:4px;font-size:14px;margin-bottom:16px;}
+.list-item{background:#fff;border:1px solid var(--line);border-radius:4px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.list-item:hover{border-color:var(--steel);}
+.li-name{font-weight:600;font-size:14px;}
+.li-meta{font-size:12px;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;margin-top:2px;}
+.pill{font-size:10px;font-weight:700;text-transform:uppercase;padding:4px 9px;border-radius:20px;white-space:nowrap;}
+.p-ok{background:rgba(76,154,63,0.14);color:var(--teal);}
+.p-warn{background:rgba(217,168,18,0.16);color:var(--yellow-deep);}
+.p-bad{background:rgba(184,76,62,0.13);color:var(--red);}
+.cert-official{background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+.cert-official-head{background:var(--navy);color:#fff;padding:26px 30px;text-align:center;}
+.cert-official-head h1{font-family:'Oswald',sans-serif;font-size:18px;margin:0;}
+.cert-official-head p{margin:4px 0 0;font-size:12px;color:#B9C6CE;}
+.verify-flag{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:6px 14px;border-radius:20px;background:rgba(76,154,63,0.2);color:#A8E6B0;font-size:11.5px;font-weight:700;text-transform:uppercase;}
+.verify-flag.invalid{background:rgba(184,76,62,0.2);color:#F3B3AB;}
+.cert-official-body{padding:26px 30px;}
+.cert-row{display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);font-size:13.5px;}
+.cert-row:last-child{border-bottom:none;}
+.cert-row label{color:var(--ink-soft);font-weight:600;}
+.cert-row span{font-family:'IBM Plex Mono',monospace;text-align:right;}
+.section-title{font-family:'Oswald',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:0.7px;color:var(--steel);margin:0 0 10px;}
+.doclink{display:block;text-align:center;padding:10px;border:1px solid var(--line);border-radius:4px;color:var(--navy);text-decoration:none;font-size:12.5px;font-weight:600;margin-bottom:8px;background:var(--paper);}
+.back{display:block;text-align:center;margin-top:18px;font-size:12.5px;color:var(--blue);text-decoration:none;}
+.empty{text-align:center;padding:40px 10px;color:var(--ink-soft);font-size:13px;}
+</style></head>
+<body>
+<div class="top"><div class="seal"></div><h1>Consulta de Certificados · SESMET 2026</h1><p>NR-10 e NR-35 — verificação de autenticidade</p></div>
+<div class="wrap" id="app"></div>
+<script>
+const CERTS = ${dataJson};
+function esc(s){return (s||'').toString().replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function fmtDate(d){if(!d)return '—';const [y,m,day]=d.split('-');if(!y)return d;return day+'/'+m+'/'+y;}
+function status(c){if(!c.dataValidade)return{label:'Incompleto',cls:'p-warn'};const t=new Date().toISOString().slice(0,10);const days=(new Date(c.dataValidade)-new Date(t))/86400000;if(days<0)return{label:'Vencido',cls:'p-bad'};if(days<=60)return{label:'Vence em breve',cls:'p-warn'};return{label:'Válido',cls:'p-ok'};}
+function renderList(){
+  const app=document.getElementById('app');
+  app.innerHTML='<input class="search" id="s" placeholder="Buscar por nome, CPF ou nº do certificado…"><div id="items"></div>';
+  document.getElementById('s').oninput=draw; draw();
+  function draw(){
+    const q=(document.getElementById('s').value||'').toLowerCase();
+    const items=document.getElementById('items');
+    const filtered=CERTS.filter(c=>!q||[c.nome,c.cpf,c.numeroCertificado].join(' ').toLowerCase().includes(q));
+    if(!filtered.length){items.innerHTML='<div class="empty">Nenhum certificado encontrado.</div>';return;}
+    items.innerHTML=filtered.map(c=>{const st=status(c);return '<div class="list-item" onclick="location.hash=\\'consulta='+c.id+'\\'"><div><div class="li-name">'+esc(c.nome||'—')+'</div><div class="li-meta">'+esc(c.curso)+' · Nº '+esc(c.numeroCertificado||'—')+'</div></div><div class="pill '+st.cls+'">'+st.label+'</div></div>';}).join('');
+  }
+}
+function renderDetail(id){
+  const c=CERTS.find(x=>x.id===id);
+  const app=document.getElementById('app');
+  if(!c){app.innerHTML='<div class="cert-official"><div class="cert-official-head"><h1>Certificado não encontrado</h1><p>Código inválido.</p></div></div><a class="back" href="#">← Voltar à lista</a>';return;}
+  const st=status(c); const valido = st.cls==='p-ok'||st.cls==='p-warn';
+  let docs='';
+  const list=[['arquivoData','arquivoNome','Certificado'],['artArquivoData','artArquivoNome','ART do instrutor'],['crqInstrutorArquivoData','crqInstrutorArquivoNome','CRQ do instrutor'],['crqPjArquivoData','crqPjArquivoNome','CRQ da PJ']];
+  list.forEach(([dk,nk,label])=>{ if(c[dk]) docs += '<a class="doclink" href="'+c[dk]+'" download="'+esc(c[nk])+'">📎 '+label+' — '+esc(c[nk])+'</a>'; });
+  app.innerHTML = '<div class="cert-official"><div class="cert-official-head"><h1>'+esc(c.curso)+' — Certificado de Treinamento</h1><p>SESMET 2026 · Verificação de autenticidade</p>'
+    +'<div class="verify-flag '+(valido?'':'invalid')+'">'+(valido?'✓ ':'✕ ')+st.label+'</div></div>'
+    +'<div class="cert-official-body">'
+    +row('Profissional', c.nome)+row('Nº do certificado', c.numeroCertificado)+row('Curso', c.curso)
+    +row('Carga horária', c.cargaHoraria? c.cargaHoraria+'h':'')+row('Data de realização', fmtDate(c.dataRealizacao))
+    +row('Validade', fmtDate(c.dataValidade))+row('Instrutor responsável', c.instrutorNome)
+    +row('ART do instrutor', c.instrutorART)+row('CRQ do instrutor', c.instrutorCRQ)+row('CRQ da PJ (SESMET)', c.crqPJ)
+    +'</div>'+(docs? '<div class="cert-official-body" style="padding-top:0;"><div class="section-title">Documentos anexados</div>'+docs+'</div>':'')
+    +'</div><a class="back" href="#">← Voltar à lista</a>';
+}
+function row(label,val){return '<div class="cert-row"><label>'+label+'</label><span>'+esc(val||'—')+'</span></div>';}
+function route(){const h=window.location.hash;const m=h.match(/#consulta=(.+)/);if(m){renderDetail(decodeURIComponent(m[1]));}else{renderList();}}
+window.addEventListener('hashchange',route); route();
+<\/script></body></html>`;
+}
+
+function exportPublicHtml(){
+  if(!certificates.some(isFilled)){
+    alert('Cadastre ao menos um certificado antes de exportar a página pública.');
+    return;
+  }
+  const html = buildPublicHtml();
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'certificados-sesmet-2026-publicado.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  alert('Arquivo exportado! Hospede este arquivo .html no site ou intranet da empresa. Depois, configure esse mesmo endereço em "Configurar link de publicação" e gere o QR Code geral — ele já cobre a consulta de todos os certificados, sem precisar de um código por pessoa.');
+}
+
+/* ======================= CONSULTA PÚBLICA VIEW ======================= */
+function renderConsulta(id){
+  const cert = certificates.find(c=>c.id===id);
+  const app = document.getElementById('app');
+  if(!cert){
+    app.innerHTML = `<div class="consulta-wrap"><div class="cert-official">
+      <div class="cert-official-head"><div class="seal"></div><h1>Certificado não encontrado</h1>
+      <p>O código informado não corresponde a nenhum registro.</p></div>
+    </div><a class="back-link" href="${getBaseUrl()}">← Voltar ao painel</a></div>`;
+    return;
+  }
+  const st = certStatus(cert);
+  const valido = st.cls === 'status-ok' || st.cls === 'status-warn';
+  app.innerHTML = `
+    <div class="consulta-wrap">
+      <div class="cert-official">
+        <div class="cert-official-head">
+          <div class="seal"></div>
+          <h1>${esc(cert.curso)} — Certificado de Treinamento</h1>
+          <p>SESMET 2026 · Verificação de autenticidade</p>
+          <div class="verify-flag ${valido?'':'invalid'}">${valido? '✓ '+st.label : '✕ '+st.label}</div>
+        </div>
+        <div class="cert-official-body">
+          <div class="cert-row"><label>Profissional</label><span style="font-family:'Inter'; font-weight:600;">${esc(cert.nome)}</span></div>
+          <div class="cert-row"><label>Nº do certificado</label><span>${esc(cert.numeroCertificado)}</span></div>
+          <div class="cert-row"><label>Curso</label><span>${esc(cert.curso)}</span></div>
+          <div class="cert-row"><label>Carga horária</label><span>${cert.cargaHoraria? esc(cert.cargaHoraria)+'h':'—'}</span></div>
+          <div class="cert-row"><label>Data de realização</label><span>${fmtDate(cert.dataRealizacao)}</span></div>
+          <div class="cert-row"><label>Validade</label><span>${fmtDate(cert.dataValidade)}</span></div>
+          <div class="cert-row"><label>Instrutor responsável</label><span style="font-family:'Inter';">${cert.instrutorNome? esc(cert.instrutorNome):'—'}</span></div>
+          <div class="cert-row"><label>ART do instrutor</label><span>${cert.instrutorART? esc(cert.instrutorART):'—'}</span></div>
+          <div class="cert-row"><label>CRQ do instrutor</label><span>${cert.instrutorCRQ? esc(cert.instrutorCRQ):'—'}</span></div>
+          <div class="cert-row"><label>CRQ da PJ (SESMET)</label><span>${cert.crqPJ? esc(cert.crqPJ):'—'}</span></div>
+        </div>
+        ${(cert.arquivoData||cert.artArquivoData||cert.crqInstrutorArquivoData||cert.crqPjArquivoData) ? `
+        <div class="cert-official-body" style="padding-top:0;">
+          <div class="form-section-title" style="margin-top:0;">Documentos anexados</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            ${cert.arquivoData? `<a class="link-btn" style="justify-content:center;" href="${cert.arquivoData}" download="${esc(cert.arquivoNome)}">📎 Certificado — ${esc(cert.arquivoNome)}</a>`:''}
+            ${cert.artArquivoData? `<a class="link-btn" style="justify-content:center;" href="${cert.artArquivoData}" download="${esc(cert.artArquivoNome)}">📎 ART do instrutor — ${esc(cert.artArquivoNome)}</a>`:''}
+            ${cert.crqInstrutorArquivoData? `<a class="link-btn" style="justify-content:center;" href="${cert.crqInstrutorArquivoData}" download="${esc(cert.crqInstrutorArquivoNome)}">📎 CRQ do instrutor — ${esc(cert.crqInstrutorArquivoNome)}</a>`:''}
+            ${cert.crqPjArquivoData? `<a class="link-btn" style="justify-content:center;" href="${cert.crqPjArquivoData}" download="${esc(cert.crqPjArquivoNome)}">📎 CRQ da PJ — ${esc(cert.crqPjArquivoNome)}</a>`:''}
+          </div>
+        </div>` : ''}
+      </div>
+      <a class="back-link" href="${getBaseUrl()}">← Voltar ao painel administrativo</a>
+    </div>
+  `;
+}
+
+/* ======================= ROUTER ======================= */
+function route(){
+  const hash = window.location.hash;
+  const match = hash.match(/#consulta=(.+)/);
+  if(match){ renderConsulta(decodeURIComponent(match[1])); }
+  else { renderAdmin(); }
+}
+
+/* ======================= INIT ======================= */
+(async function init(){
+  document.getElementById('app').innerHTML = `<div class="empty-state" style="color:#B9C6CE; margin-top:80px;">Carregando registros…</div>`;
+  await loadAll();
+  route();
+  window.addEventListener('hashchange', route);
+})();
+</script>
+</body>
+</html>
